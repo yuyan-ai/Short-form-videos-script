@@ -1,0 +1,12 @@
+{
+  "mode": "mock",
+  "status": "needs_input",
+  "reason": "1 validation error for Request\naudience\n  Field required [type=missing, input_value={'topic': '介绍轻剪...enario': 'missing_info'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+  "script": null,
+  "duration": null,
+  "sources": [],
+  "risks": [
+    "合成素材；固定 Mock 决策，未验证真实模型；时长仅为估算"
+  ],
+  "steps": 0
+}

@@ -1,0 +1,1 @@
+{"step": 1, "actor": "deterministic_mock", "action": "search_materials", "arguments": {"query": "字幕"}, "reason": "先取得可引用事实", "observation": {"error": "演示注入：素材工具不可用"}}

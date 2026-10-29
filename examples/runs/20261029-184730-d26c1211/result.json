@@ -1,0 +1,67 @@
+{
+  "mode": "mock",
+  "status": "completed",
+  "reason": "根据当前版本检查报告结束",
+  "script": {
+    "revision": 2,
+    "title": "给创作加上字幕",
+    "scenes": [
+      {
+        "scene_id": "S01",
+        "visual": "创作者工作画面",
+        "voiceover": "准备好这次的创作内容。",
+        "subtitle": "准备好这次的创作内容。",
+        "min_visual_seconds": 2,
+        "claims": []
+      },
+      {
+        "scene_id": "S02",
+        "visual": "产品演示画面",
+        "voiceover": "支持字幕",
+        "subtitle": "支持字幕",
+        "min_visual_seconds": 3,
+        "claims": [
+          {
+            "text": "支持字幕",
+            "material_id": "P01",
+            "fact_id": "P01-F01"
+          }
+        ]
+      },
+      {
+        "scene_id": "S03",
+        "visual": "创作者工作画面",
+        "voiceover": "检查文字，再发布你的作品。",
+        "subtitle": "检查文字，再发布你的作品。",
+        "min_visual_seconds": 2,
+        "claims": []
+      }
+    ]
+  },
+  "duration": {
+    "draft_hash": "e5b55882eddce92b9b93bed37b6bb03855c0444ce8ee10ce98134cb38fc40d08",
+    "scenes": [
+      {
+        "scene_id": "S01",
+        "seconds": 3.0
+      },
+      {
+        "scene_id": "S02",
+        "seconds": 3.5
+      },
+      {
+        "scene_id": "S03",
+        "seconds": 3.25
+      }
+    ],
+    "total_seconds": 9.75,
+    "method": "每秒4个字/字符，逐镜取最低画面时长与朗读时长较大值，加0.5秒停顿；仅为估算"
+  },
+  "sources": [
+    "P01"
+  ],
+  "risks": [
+    "合成素材；固定 Mock 决策，未验证真实模型；时长仅为估算"
+  ],
+  "steps": 7
+}

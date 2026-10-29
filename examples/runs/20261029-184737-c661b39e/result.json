@@ -1,0 +1,12 @@
+{
+  "mode": "mock",
+  "status": "failed",
+  "reason": "演示注入：素材工具不可用",
+  "script": null,
+  "duration": null,
+  "sources": [],
+  "risks": [
+    "合成素材；固定 Mock 决策，未验证真实模型；时长仅为估算"
+  ],
+  "steps": 1
+}

@@ -1,0 +1,2 @@
+{"step": 1, "actor": "deterministic_mock", "action": "search_materials", "arguments": {"query": "字幕"}, "reason": "先取得可引用事实", "observation": {"count": 0, "ids": []}}
+{"step": 2, "actor": "deterministic_mock", "action": "request_info", "arguments": {}, "reason": "未检索到素材，请补充产品资料或调整查询", "observation": {"status": "needs_input"}}
