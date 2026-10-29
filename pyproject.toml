@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Fact-grounded short-form video script agent built with LangGraph"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["langgraph", "pydantic>=2,<3"]
+dependencies = ["langgraph", "pydantic>=2,<3", "httpx>=0.28,<1"]
 
 [project.optional-dependencies]
 dev = ["pytest"]

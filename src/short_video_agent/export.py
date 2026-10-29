@@ -8,15 +8,15 @@ def export_run(directory: Path, request, state):
     def save(name, obj):
         (directory / name).write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
     save("input.json", request)
-    result = {"mode": "mock", "status": state["status"], "reason": state.get("reason"),
+    result = {"mode": state.get("mode", "mock"), "status": state["status"], "reason": state.get("reason"),
               "script": state.get("draft"), "duration": state.get("duration"),
               "sources": [m["id"] for m in state.get("materials", [])],
-              "risks": ["合成素材；固定 Mock 决策，未验证真实模型；时长仅为估算"], "steps": state["steps"]}
+              "risks": ["合成素材；时长仅为估算；模型效果须单独评估"], "steps": state["steps"]}
     save("result.json", result)
     save("checks.json", state.get("checks", {}))
-    save("manifest.json", {"mode": "mock", "model": None, "rules_version": state.get("rules", {}).get("version"), "materials": state.get("materials", [])})
+    save("manifest.json", {"mode": state.get("mode", "mock"), "model": state.get("model"), "rules_version": state.get("rules", {}).get("version"), "materials": state.get("materials", [])})
     (directory / "trace.jsonl").write_text("".join(json.dumps(e, ensure_ascii=False)+"\n" for e in state["trace"]), encoding="utf-8")
-    lines = ["# 离线演示脚本", "", "状态："+state["status"], "", "合成素材 / Mock 决策 / 估算时长", ""]
+    lines = ["# 脚本结果（" + state.get("mode", "mock") + "）", "", "状态："+state["status"], "", "合成素材 / 估算时长", ""]
     draft = state.get("draft")
     if draft:
         lines.append("## "+draft["title"])

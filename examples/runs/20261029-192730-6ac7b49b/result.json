@@ -1,0 +1,91 @@
+{
+  "mode": "live",
+  "status": "completed",
+  "reason": "草稿已保存，30秒估算符合目标且规则校验通过。",
+  "script": {
+    "title": "给创作加上字幕",
+    "scenes": [
+      {
+        "scene_id": "S01",
+        "visual": "创作者工作画面",
+        "voiceover": "准备好这次的创作内容。",
+        "subtitle": "准备好这次的创作内容。",
+        "min_visual_seconds": 5.0,
+        "claims": []
+      },
+      {
+        "scene_id": "S02",
+        "visual": "产品演示画面",
+        "voiceover": "给创作加上字幕",
+        "subtitle": "给创作加上字幕",
+        "min_visual_seconds": 8.0,
+        "claims": [
+          {
+            "text": "支持字幕",
+            "material_id": "P01",
+            "fact_id": "P01-F01"
+          }
+        ]
+      },
+      {
+        "scene_id": "S03",
+        "visual": "创作者工作画面",
+        "voiceover": "检查文字，再发布你的作品。",
+        "subtitle": "检查文字，再发布你的作品。",
+        "min_visual_seconds": 8.0,
+        "claims": [
+          {
+            "text": "支持字幕",
+            "material_id": "P01",
+            "fact_id": "P01-F01"
+          }
+        ]
+      },
+      {
+        "scene_id": "S04",
+        "visual": "产品演示画面",
+        "voiceover": "给创作加上字幕",
+        "subtitle": "给创作加上字幕",
+        "min_visual_seconds": 7.0,
+        "claims": [
+          {
+            "text": "支持字幕",
+            "material_id": "P01",
+            "fact_id": "P01-F01"
+          }
+        ]
+      }
+    ],
+    "revision": 1
+  },
+  "duration": {
+    "draft_hash": "9a10866c0cbc2f7901fcced5621fe2f8ab666d6352b4277d79592a94046f1bfc",
+    "scenes": [
+      {
+        "scene_id": "S01",
+        "seconds": 5.5
+      },
+      {
+        "scene_id": "S02",
+        "seconds": 8.5
+      },
+      {
+        "scene_id": "S03",
+        "seconds": 8.5
+      },
+      {
+        "scene_id": "S04",
+        "seconds": 7.5
+      }
+    ],
+    "total_seconds": 30.0,
+    "method": "每秒4个字/字符，逐镜取最低画面时长与朗读时长较大值，加0.5秒停顿；仅为估算"
+  },
+  "sources": [
+    "P01"
+  ],
+  "risks": [
+    "合成素材；时长仅为估算；模型效果须单独评估"
+  ],
+  "steps": 7
+}

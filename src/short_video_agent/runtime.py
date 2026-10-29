@@ -36,6 +36,9 @@ class State(TypedDict, total=False):
     max_steps: int
     searched: bool
     revision: int
+    mode: str
+    model: str
+    deadline: float
 
 
 def fingerprint(draft):
@@ -148,14 +151,21 @@ def dispatch(state):
     update = {}
     try:
         if name == "search_materials":
-            if state["request"]["demo_scenario"] == "tool_failure":
+            if state.get("mode") != "live" and state["request"]["demo_scenario"] == "tool_failure":
                 raise OSError("演示注入：素材工具不可用")
             matches = search(action["args"]["query"], state["request"]["product_id"])
-            update = {"materials": matches, "searched": True}
+            merged = {m["id"]: m for m in state.get("materials", [])}
+            merged.update({m["id"]: m for m in matches})
+            update = {"materials": list(merged.values()), "searched": True, "checks": {}}
             observation = {"count": len(matches), "ids": [m["id"] for m in matches]}
         elif name == "save_draft":
             revision = state.get("revision", 0) + 1
-            draft = make_draft(state["materials"][0], revision, action["args"]["long"])
+            if state.get("mode") == "live":
+                from .schemas import Draft
+                draft = Draft(**action["args"]["draft"]).model_dump()
+                draft["revision"] = revision
+            else:
+                draft = make_draft(state["materials"][0], revision, action["args"]["long"])
             update = {"draft": draft, "revision": revision, "duration": {}, "checks": {}}
             observation = {"revision": revision, "draft_hash": fingerprint(draft)}
         elif name == "estimate_duration":
@@ -164,22 +174,47 @@ def dispatch(state):
         elif name == "check_rules":
             observation = check(state["draft"], state["materials"], state["rules"])
             update = {"checks": observation}
+        elif name == "invalid_output":
+            return {}
+        elif name == "finish" and not can_finish(state):
+            observation = {"error": "当前草稿缺少通过的时长/规则报告，请补检或修改"}
         else:
             status = "needs_input" if name == "request_info" else "completed" if name == "finish" and can_finish(state) else "failed"
             update = {"status": status, "reason": action["reason"]}
             observation = {"status": status}
-    except (OSError, ValueError, KeyError) as exc:
-        update = {"status": "failed", "reason": str(exc)}
-        observation = {"error": str(exc)}
-    event = {"step": state["steps"] + 1, "actor": "deterministic_mock", "action": name,
+    except (OSError, ValueError, KeyError, IndexError) as exc:
+        message = "工具执行或参数校验失败，请核对动作参数及前置草稿" if isinstance(exc, ValidationError) else str(exc)
+        update = {} if state.get("mode") == "live" else {"status": "failed", "reason": message}
+        observation = {"error": message}
+    event = {"step": state["steps"] + 1, "actor": "live_model" if state.get("mode") == "live" else "deterministic_mock", "action": name,
              "arguments": action["args"], "reason": action["reason"], "observation": observation}
     return {**update, "steps": state["steps"] + 1, "trace": state["trace"] + [event]}
 
 
-def build_graph():
+def build_graph(model=None):
+    import time
+    from .models.live import ModelError
+
+    def live_decide(state):
+        if state["steps"] >= state["max_steps"] or time.monotonic() >= state["deadline"]:
+            return {"status": "budget_exceeded", "reason": "达到模型调用或总运行时间上限"}
+        try:
+            action = model.decide(state)
+            if time.monotonic() >= state["deadline"]:
+                return {"status": "budget_exceeded", "reason": "总运行时间已耗尽"}
+            return {"action": action}
+        except ValidationError:
+            event = {"step": state["steps"] + 1, "actor": "live_model", "action": "invalid_output",
+                     "observation": {"error": "输出结构不合法，请按schema重试"}}
+            return {"steps": state["steps"] + 1, "action": {"name": "invalid_output", "args": {}, "reason": "输出结构不合法"},
+                    "trace": state["trace"] + [event]}
+        except ModelError as exc:
+            event = {"step": state["steps"] + 1, "actor": "live_model", "action": "model_error", "observation": {"error": str(exc)}}
+            return {"status": "failed", "reason": str(exc), "steps": state["steps"] + 1, "trace": state["trace"] + [event]}
+
     graph = StateGraph(State)
     graph.add_node("validate", validate)
-    graph.add_node("decide", decide)
+    graph.add_node("decide", live_decide if model else decide)
     graph.add_node("dispatch", dispatch)
     graph.add_edge(START, "validate")
     graph.add_conditional_edges("validate", lambda s: "decide" if s["status"] == "running" else END)
@@ -188,8 +223,11 @@ def build_graph():
     return graph.compile()
 
 
-def run(request, max_steps=10):
+def run(request, max_steps=10, model=None, total_seconds=180):
+    import time
     if not 1 <= max_steps <= 100:
         raise ValueError("max_steps 必须为 1 到 100")
-    return build_graph().invoke({"request": request, "steps": 0, "max_steps": max_steps, "trace": []},
+    return build_graph(model).invoke({"request": request, "steps": 0, "max_steps": max_steps, "trace": [],
+                                     "mode": "live" if model else "mock", "model": getattr(getattr(model, "config", None), "model", None),
+                                     "deadline": time.monotonic() + total_seconds},
                                 {"recursion_limit": 2 * max_steps + 5})

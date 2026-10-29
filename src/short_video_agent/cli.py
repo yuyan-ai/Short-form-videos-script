@@ -11,15 +11,21 @@ from .export import export_run
 def main():
     parser = argparse.ArgumentParser(description="短视频脚本离线流程演示，无需 API Key")
     parser.add_argument("--input", required=True, type=Path)
-    parser.add_argument("--mode", choices=["mock"], default="mock")
+    parser.add_argument("--mode", choices=["mock", "live"], default="mock")
     parser.add_argument("--output", type=Path, default=Path("examples/runs"))
     parser.add_argument("--max-steps", type=int, default=10)
+    parser.add_argument("--env-file", type=Path, default=Path(__file__).resolve().parents[2] / ".env")
     args = parser.parse_args()
     try:
         request = json.loads(args.input.read_text(encoding="utf-8-sig"))
         if not isinstance(request, dict):
             raise ValueError("输入 JSON 必须为对象")
-        state = run(request, args.max_steps)
+        model = None
+        if args.mode == "live":
+            from .config import ModelConfig
+            from .models.live import LiveModel
+            model = LiveModel(ModelConfig.from_env(args.env_file))
+        state = run(request, args.max_steps, model=model)
     except (OSError, ValueError) as exc:
         parser.exit(2, f"输入或运行错误：{exc}\n")
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S") + "-" + uuid4().hex[:8]
