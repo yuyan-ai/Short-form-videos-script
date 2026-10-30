@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>轻剪 · 脚本工作台</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header><a class="brand" href="/">◈ <strong>轻剪</strong><span>脚本工作台</span></a><span class="local">● 本地运行</span></header>
+<main>
+  <div class="intro"><div><p class="eyebrow">SCRIPT STUDIO / 01</p><h1>让想法，成为下一条视频。</h1><p>从素材出发，生成有据可查、节奏清晰的短视频脚本。</p></div><span class="pill">Python + LangGraph</span></div>
+  <div class="workspace">
+    <aside>
+      <section class="panel"><div class="section-title"><span class="number">01</span><h2>创作需求</h2></div>
+      <form id="brief">
+        <label for="topic">视频主题</label><textarea id="topic" required rows="2" maxlength="500">介绍轻剪字幕功能</textarea>
+        <div class="row"><div><label for="audience">目标受众</label><input id="audience" required value="短视频创作者" maxlength="100"></div><div><label for="platform">发布平台</label><select id="platform"><option>抖音</option><option>小红书</option><option>视频号</option><option>B站</option></select></div></div>
+        <div class="row"><div><label for="duration">时长上限（秒）</label><input id="duration" type="number" min="1" max="300" value="30" required></div><div><label for="style">表达风格</label><select id="style"><option>清晰自然</option><option>轻松口语</option><option>简洁专业</option></select></div></div>
+        <label for="product">产品</label><select id="product"><option value="qingjian">轻剪 · 合成演示产品</option><option value="unknown">无素材产品（验证异常路径）</option></select>
+        <label for="query">素材检索词</label><input id="query" required value="字幕" maxlength="100">
+        <label for="mode">运行模式</label><select id="mode"><option value="mock">Mock · 离线流程验证</option><option value="live">Live · 真实模型生成</option></select>
+        <p class="hint" id="mode-note">固定策略与模板，不代表真实模型决策。</p>
+        <details><summary>高级设置</summary><label for="steps">最大调用次数</label><input id="steps" type="number" min="1" max="30" value="12"><label for="scenario">离线演示场景</label><select id="scenario"><option value="normal">正常生成</option><option value="overlong">超时长后修正</option><option value="tool_failure">工具故障</option></select><p class="hint">演示场景只对 Mock 生效。</p></details>
+        <button id="generate" class="primary" type="submit">生成脚本 <span>↗</span></button>
+      </form></section>
+      <section class="panel materials"><h2>素材库 <span class="tiny">合成资料</span></h2><div id="materials">正在加载素材…</div><p class="hint">不包含效果、价格或效率承诺。</p></section>
+    </aside>
+    <section class="panel output">
+      <div class="output-head"><div class="section-title"><span class="number">02</span><h2>创作结果</h2></div><span class="badge" id="status">等待生成</span></div>
+      <div id="notice" role="status" aria-live="polite">先填写左侧需求，或直接生成一份演示脚本。</div>
+      <div class="tabs" role="tablist" aria-label="结果视图"><button role="tab" aria-selected="true" data-tab="script" id="tab-script" aria-controls="script">分镜脚本</button><button role="tab" aria-selected="false" data-tab="checks" id="tab-checks" aria-controls="checks">质量检查</button><button role="tab" aria-selected="false" data-tab="trace" id="tab-trace" aria-controls="trace">执行记录</button></div>
+      <div id="script" role="tabpanel" aria-labelledby="tab-script"><div class="empty"><span>▤</span><h3>把创作的第一步，留给灵感。</h3><p>生成后，这里将展示分镜、旁白、字幕与素材引用。</p><div class="flow">检索素材 → 生成草稿 → 检查与修正</div></div></div>
+      <div id="checks" role="tabpanel" aria-labelledby="tab-checks" hidden><p class="hint">生成后查看事实引用、节奏与规则检查。</p></div>
+      <div id="trace" role="tabpanel" aria-labelledby="tab-trace" hidden><p class="hint">生成后查看动作、参数、观察结果与公开决策依据。</p></div>
+      <div class="actions"><button id="download" disabled>下载 Markdown ↓</button><button id="download-json" disabled>下载完整记录 ↓</button></div>
+    </section>
+  </div><footer>素材均为虚构演示资料 · 时长为估算 · 所有内容发布前请人工复核</footer>
+</main><script src="/app.js" defer></script></body></html>

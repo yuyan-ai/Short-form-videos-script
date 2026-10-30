@@ -1,0 +1,47 @@
+{
+  "mode": "mock",
+  "model": null,
+  "rules_version": "2",
+  "rules": {
+    "version": "2",
+    "synthetic": true,
+    "forbidden_terms": [
+      "效率提升80%",
+      "全网第一",
+      "保证涨粉",
+      "永久免费"
+    ],
+    "neutral_texts": [
+      "给创作加上字幕",
+      "准备好这次的创作内容。",
+      "检查文字，再发布你的作品。",
+      "产品演示画面",
+      "创作者工作画面",
+      "字幕先检查，再发布",
+      "开始前，先整理这次要表达的内容。",
+      "用画面讲清主题，也让文字保持清楚。",
+      "逐句检查字幕，确认文字与画面对应。",
+      "发布前，再读一遍你的文案。",
+      "打开脚本草稿画面",
+      "展示竖屏预览画面",
+      "字幕文字特写"
+    ],
+    "max_scene_padding_seconds": 3
+  },
+  "materials": [
+    {
+      "id": "P01",
+      "product_id": "qingjian",
+      "product_name": "轻剪（虚构）",
+      "synthetic": true,
+      "source": "项目合成素材，不代表真实产品",
+      "version": "1",
+      "facts": [
+        {
+          "id": "P01-F01",
+          "text": "支持字幕"
+        }
+      ]
+    }
+  ]
+}
