@@ -1,20 +1,24 @@
 """离线原型：真实工具配合确定性 Mock 决策，不代表 LLM 能力。"""
-import hashlib
 import json
 from pathlib import Path
+from .tools.retrieval import search
+from .tools.duration import estimate
+from .tools.rules import check
+from .policy import fingerprint, can_finish
 from typing import TypedDict
 
 from langgraph.graph import StateGraph, START, END
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class Request(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
     topic: str = Field(min_length=1)
     audience: str = Field(min_length=1)
     platform: str = Field(min_length=1)
-    target_seconds: float = Field(gt=0, le=300)
+    target_seconds: float = Field(gt=0, le=300, allow_inf_nan=False)
     style: str = "清晰自然"
     product_id: str = "qingjian"
     query: str = "字幕"
@@ -41,67 +45,14 @@ class State(TypedDict, total=False):
     deadline: float
 
 
-def fingerprint(draft):
-    return hashlib.sha256(json.dumps(draft, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
-def search(query, product_id):
-    records = json.loads((ROOT / "data/materials.json").read_text(encoding="utf-8-sig"))
-    return [m for m in records if m["product_id"] == product_id
-            and query in json.dumps(m, ensure_ascii=False)]
 
 
-def estimate(draft):
-    scenes = []
-    for scene in draft["scenes"]:
-        text = scene["voiceover"] or scene["subtitle"]
-        count = sum(c.isalnum() for c in text)
-        seconds = round(max(count / 4, scene["min_visual_seconds"]) + 0.5, 2)
-        scenes.append({"scene_id": scene["scene_id"], "seconds": seconds})
-    return {"draft_hash": fingerprint(draft), "scenes": scenes,
-            "total_seconds": round(sum(s["seconds"] for s in scenes), 2),
-            "method": "每秒4个字/字符，逐镜取最低画面时长与朗读时长较大值，加0.5秒停顿；仅为估算"}
 
 
-def check(draft, materials, rules):
-    allowed = {f["id"]: f["text"] for m in materials for f in m["facts"]}
-    issues = []
-    # 原型严格限制所有用户可见文本为审核过的素材表达或中性模板。
-    neutral = rules["neutral_texts"]
-    for field, text in [("title", draft["title"])]:
-        if text not in neutral:
-            issues.append({"field": field, "code": "UNAPPROVED_TEXT"})
-    for scene in draft["scenes"]:
-        for field in ("visual", "voiceover", "subtitle"):
-            text = scene[field]
-            if text and text not in neutral and text not in allowed.values():
-                issues.append({"scene_id": scene["scene_id"], "field": field, "code": "UNAPPROVED_TEXT"})
-        claims = scene["claims"]
-        for claim in claims:
-            if allowed.get(claim["fact_id"]) != claim["text"] or not any(
-                m["id"] == claim["material_id"] and any(f["id"] == claim["fact_id"] for f in m["facts"])
-                for m in materials
-            ):
-                issues.append({"scene_id": scene["scene_id"], "code": "UNSUPPORTED_CLAIM"})
-        for field in ("visual", "voiceover", "subtitle"):
-            if scene[field] in allowed.values() and not any(c["text"] == scene[field] for c in claims):
-                issues.append({"scene_id": scene["scene_id"], "code": "MISSING_CITATION"})
-    text = json.dumps(draft, ensure_ascii=False)
-    for word in rules["forbidden_terms"]:
-        if word in text:
-            issues.append({"code": "FORBIDDEN_TERM", "term": word})
-    return {"draft_hash": fingerprint(draft), "passed": not issues, "issues": issues}
 
 
-def can_finish(state):
-    draft = state.get("draft")
-    if not draft:
-        return False
-    h = fingerprint(draft)
-    return (state.get("duration", {}).get("draft_hash") == h
-            and state.get("checks", {}).get("draft_hash") == h
-            and state["checks"]["passed"]
-            and state["duration"]["total_seconds"] <= state["request"]["target_seconds"])
 
 
 def make_draft(material, revision, long=False):
@@ -123,6 +74,8 @@ def validate(state):
         return {"request": request, "rules": rules, "status": "running"}
     except ValidationError as exc:
         return {"status": "needs_input", "reason": str(exc)}
+    except (OSError, ValueError, TypeError) as exc:
+        return {"status": "failed", "reason": "规则文件加载失败：" + type(exc).__name__}
 
 
 def decide(state):

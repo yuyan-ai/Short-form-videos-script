@@ -9,7 +9,7 @@ from .export import export_run
 
 
 def main():
-    parser = argparse.ArgumentParser(description="短视频脚本离线流程演示，无需 API Key")
+    parser = argparse.ArgumentParser(description="短视频脚本 Agent：mock 离线演示 / live 真实模型")
     parser.add_argument("--input", required=True, type=Path)
     parser.add_argument("--mode", choices=["mock", "live"], default="mock")
     parser.add_argument("--output", type=Path, default=Path("examples/runs"))

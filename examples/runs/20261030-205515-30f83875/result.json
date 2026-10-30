@@ -1,0 +1,137 @@
+{
+  "mode": "live",
+  "status": "completed",
+  "reason": "草稿已通过时长与规则检查，可交付。",
+  "script": {
+    "title": "给创作加上字幕",
+    "scenes": [
+      {
+        "scene_id": "s1",
+        "visual": "创作者工作画面",
+        "voiceover": "开始前，先整理这次要表达的内容。",
+        "subtitle": "准备好这次的创作内容。",
+        "min_visual_seconds": 2.0,
+        "claims": []
+      },
+      {
+        "scene_id": "s2",
+        "visual": "产品演示画面",
+        "voiceover": "支持字幕",
+        "subtitle": "给创作加上字幕",
+        "min_visual_seconds": 3.0,
+        "claims": [
+          {
+            "text": "支持字幕",
+            "material_id": "P01",
+            "fact_id": "P01-F01"
+          }
+        ]
+      },
+      {
+        "scene_id": "s3",
+        "visual": "展示竖屏预览画面",
+        "voiceover": "支持竖屏预览",
+        "subtitle": "用画面讲清主题，也让文字保持清楚。",
+        "min_visual_seconds": 3.0,
+        "claims": [
+          {
+            "text": "支持竖屏预览",
+            "material_id": "P02",
+            "fact_id": "P02-F01"
+          }
+        ]
+      },
+      {
+        "scene_id": "s4",
+        "visual": "字幕文字特写",
+        "voiceover": "字幕先检查，再发布",
+        "subtitle": "逐句检查字幕，确认文字与画面对应。",
+        "min_visual_seconds": 3.0,
+        "claims": []
+      },
+      {
+        "scene_id": "s5",
+        "visual": "打开脚本草稿画面",
+        "voiceover": "支持保存脚本草稿",
+        "subtitle": "发布前，再读一遍你的文案。",
+        "min_visual_seconds": 3.0,
+        "claims": [
+          {
+            "text": "支持保存脚本草稿",
+            "material_id": "P03",
+            "fact_id": "P03-F01"
+          }
+        ]
+      },
+      {
+        "scene_id": "s6",
+        "visual": "产品演示画面",
+        "voiceover": "检查文字，再发布你的作品。",
+        "subtitle": "字幕先检查，再发布",
+        "min_visual_seconds": 2.0,
+        "claims": []
+      }
+    ],
+    "revision": 1
+  },
+  "duration": {
+    "draft_hash": "fec836f08930949c20ce89dd27d314df7016e00f84a8a1f6af09b6b730abfcc2",
+    "scenes": [
+      {
+        "scene_id": "s1",
+        "seconds": 4.0,
+        "voice_seconds": 3.5,
+        "subtitle_seconds": 2.5,
+        "padding_seconds": 0
+      },
+      {
+        "scene_id": "s2",
+        "seconds": 3.5,
+        "voice_seconds": 1.0,
+        "subtitle_seconds": 1.75,
+        "padding_seconds": 1.25
+      },
+      {
+        "scene_id": "s3",
+        "seconds": 4.25,
+        "voice_seconds": 1.5,
+        "subtitle_seconds": 3.75,
+        "padding_seconds": 0
+      },
+      {
+        "scene_id": "s4",
+        "seconds": 4.25,
+        "voice_seconds": 2.0,
+        "subtitle_seconds": 3.75,
+        "padding_seconds": 0
+      },
+      {
+        "scene_id": "s5",
+        "seconds": 3.5,
+        "voice_seconds": 2.0,
+        "subtitle_seconds": 2.75,
+        "padding_seconds": 0.25
+      },
+      {
+        "scene_id": "s6",
+        "seconds": 3.25,
+        "voice_seconds": 2.75,
+        "subtitle_seconds": 2.0,
+        "padding_seconds": 0
+      }
+    ],
+    "total_seconds": 22.75,
+    "voice_seconds": 12.75,
+    "padding_seconds": 1.5,
+    "method": "每秒4个字/字符，逐镜取最低画面时长与朗读时长较大值，加0.5秒停顿；仅为估算"
+  },
+  "sources": [
+    "P02",
+    "P01",
+    "P03"
+  ],
+  "risks": [
+    "合成素材；时长仅为估算；模型效果须单独评估"
+  ],
+  "steps": 6
+}

@@ -1,0 +1,6 @@
+{
+  "mode": "live",
+  "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "rules_version": "2",
+  "materials": []
+}
