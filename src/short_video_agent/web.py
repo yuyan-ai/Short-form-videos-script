@@ -97,6 +97,18 @@ def handler_for(jobs):
 
         def do_POST(self):
             if not self.local_request():
+                # Windows关闭带未读请求体的连接可能复位，导致客户端收不到403。
+                # 仅排空有界的小请求体，并限制读取等待时间。
+                previous_timeout = self.connection.gettimeout()
+                try:
+                    self.connection.settimeout(2)
+                    size = int(self.headers.get("Content-Length", "0"))
+                    if 0 < size <= 32000:
+                        self.rfile.read(size)
+                except (ValueError, OSError):
+                    pass
+                finally:
+                    self.connection.settimeout(previous_timeout)
                 return self.send(403, {"error": "只接受本地同源请求"})
             if self.path != "/api/jobs":
                 return self.send(404, {"error": "接口不存在"})

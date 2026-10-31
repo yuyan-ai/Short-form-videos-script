@@ -3,6 +3,14 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 class Strict(BaseModel):
     model_config = ConfigDict(extra="forbid")
+class CopyReview(Strict):
+    passed: bool
+    issues: list[str]
+    @model_validator(mode="after")
+    def consistent(self):
+        if self.passed == bool(self.issues):
+            raise ValueError("通过时issues必须为空，拒绝时必须说明问题")
+        return self
 class Claim(Strict):
     text: str
     material_id: str

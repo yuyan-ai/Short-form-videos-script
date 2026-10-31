@@ -1,0 +1,20 @@
+{
+  "draft_hash": "72e47ab45aa766d66b09a58ecbe16125a73afbaf9ae0ed2beb82522234fe53bc",
+  "context_hash": "b5f79f38d28739122c2b0e9ea68ae587d3d3fb1390f19273e9075452b6526cce",
+  "passed": false,
+  "issues": [
+    {
+      "field": "title",
+      "code": "UNAPPROVED_TEXT"
+    },
+    {
+      "scene_id": "S03",
+      "field": "visual",
+      "code": "UNAPPROVED_TEXT"
+    },
+    {
+      "code": "COPY_REVIEW_ERROR",
+      "message": "文案审核失败，未获批准"
+    }
+  ]
+}

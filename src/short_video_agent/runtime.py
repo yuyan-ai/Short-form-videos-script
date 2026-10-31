@@ -148,6 +148,34 @@ def build_graph(model=None):
     import time
     from .models.live import ModelError
 
+    def checked_dispatch(state):
+        # 仅原创文案需要额外模型审核；原文白名单仍走确定性检查。
+        if state["action"]["name"] != "check_rules" or not model or not state.get("draft"):
+            return dispatch(state)
+        report = check(state["draft"], state.get("materials", []), state["rules"])
+        if not any(i["code"] == "UNAPPROVED_TEXT" for i in report["issues"]):
+            return dispatch(state)
+        if state["steps"] + 2 > state["max_steps"] or time.monotonic() >= state["deadline"]:
+            return {"status": "budget_exceeded", "reason": "剩余预算不足以审核原创文案"}
+        try:
+            review = model.review(state)
+            if time.monotonic() >= state["deadline"]:
+                return {"status": "budget_exceeded", "reason": "文案审核后总时间已耗尽"}
+            if review["passed"]:
+                report["issues"] = [i for i in report["issues"] if i["code"] != "UNAPPROVED_TEXT"]
+            else:
+                report["issues"].append({"code": "COPY_REVIEW_FAILED", "details": review["issues"]})
+            report["copy_review"] = review
+        except (ModelError, ValidationError) as exc:
+            report["issues"].append({"code": "COPY_REVIEW_ERROR", "message": "文案审核失败，未获批准"})
+        report["passed"] = not report["issues"]
+        events = [{"step": state["steps"] + 1, "actor": "live_model", "action": "check_rules",
+                   "arguments": {}, "reason": state["action"]["reason"], "observation": report},
+                  {"step": state["steps"] + 2, "actor": "live_model", "action": "review_copy",
+                   "arguments": {"draft_hash": fingerprint(state["draft"])},
+                   "reason": "审核原创文案的事实依据和用户要求适配", "observation": report.get("copy_review", {"error": "审核失败"})}]
+        return {"checks": report, "steps": state["steps"] + 2, "trace": state["trace"] + events}
+
     def live_decide(state):
         if state["steps"] >= state["max_steps"] or time.monotonic() >= state["deadline"]:
             return {"status": "budget_exceeded", "reason": "达到模型调用或总运行时间上限"}
@@ -168,7 +196,7 @@ def build_graph(model=None):
     graph = StateGraph(State)
     graph.add_node("validate", validate)
     graph.add_node("decide", live_decide if model else decide)
-    graph.add_node("dispatch", dispatch)
+    graph.add_node("dispatch", checked_dispatch)
     graph.add_edge(START, "validate")
     graph.add_conditional_edges("validate", lambda s: "decide" if s["status"] == "running" else END)
     graph.add_conditional_edges("decide", lambda s: "dispatch" if s["status"] == "running" else END)
@@ -176,11 +204,21 @@ def build_graph(model=None):
     return graph.compile()
 
 
-def run(request, max_steps=10, model=None, total_seconds=180):
+def run(request, max_steps=10, model=None, total_seconds=180, initial_draft=None):
     import time
     if not 1 <= max_steps <= 100:
         raise ValueError("max_steps 必须为 1 到 100")
-    return build_graph(model).invoke({"request": request, "steps": 0, "max_steps": max_steps, "trace": [],
+    seed = {}
+    trace = []
+    if initial_draft is not None:
+        from .schemas import Draft
+        draft = Draft.model_validate(initial_draft).model_dump()
+        draft["revision"] = 1
+        initial_duration = estimate(draft)
+        seed = {"draft": draft, "revision": 1, "duration": initial_duration}
+        trace = [{"step": 0, "actor": "user", "action": "import_draft", "arguments": {"draft": draft},
+                  "reason": "导入待检查或改写的用户脚本，尚未获得检查批准", "observation": {"draft_hash": fingerprint(draft), "initial_duration": initial_duration}}]
+    return build_graph(model).invoke({**seed, "request": request, "steps": 0, "max_steps": max_steps, "trace": trace,
                                      "mode": "live" if model else "mock", "model": getattr(getattr(model, "config", None), "model", None),
                                      "deadline": time.monotonic() + total_seconds},
                                 {"recursion_limit": 2 * max_steps + 5})

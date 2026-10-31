@@ -11,6 +11,7 @@ from .export import export_run
 def main():
     parser = argparse.ArgumentParser(description="短视频脚本 Agent：mock 离线演示 / live 真实模型")
     parser.add_argument("--input", required=True, type=Path)
+    parser.add_argument("--draft", type=Path, help="导入待改脚本JSON，仅含title和scenes，不含revision")
     parser.add_argument("--mode", choices=["mock", "live"], default="mock")
     parser.add_argument("--output", type=Path, default=Path("examples/runs"))
     parser.add_argument("--max-steps", type=int, default=10)
@@ -25,7 +26,8 @@ def main():
             from .config import ModelConfig
             from .models.live import LiveModel
             model = LiveModel(ModelConfig.from_env(args.env_file))
-        state = run(request, args.max_steps, model=model)
+        draft = json.loads(args.draft.read_text(encoding="utf-8-sig")) if args.draft else None
+        state = run(request, args.max_steps, model=model, initial_draft=draft)
     except (OSError, ValueError) as exc:
         parser.exit(2, f"输入或运行错误：{exc}\n")
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S") + "-" + uuid4().hex[:8]

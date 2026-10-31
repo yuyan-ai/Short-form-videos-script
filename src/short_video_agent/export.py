@@ -13,6 +13,8 @@ def export_run(directory: Path, request, state):
               "script": state.get("draft"), "duration": state.get("duration"),
               "sources": cited, "checks": state.get("checks", {}),
               "risks": ["合成素材；时长仅为估算；模型效果须单独评估"], "steps": state["steps"]}
+    if state.get("checks", {}).get("copy_review"):
+        result["risks"].append("原创文案由同一模型的额外请求审核，可能漏判，不能替代人工事实核查")
     save("result.json", result)
     save("checks.json", state.get("checks", {}))
     save("manifest.json", {"mode": state.get("mode", "mock"), "model": state.get("model"), "rules_version": state.get("rules", {}).get("version"), "rules": state.get("rules", {}), "materials": state.get("materials", [])})

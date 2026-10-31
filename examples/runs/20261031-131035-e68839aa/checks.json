@@ -1,0 +1,10 @@
+{
+  "draft_hash": "9417ce7b56ed9f87a5255513a84fc911a85c65f22f8d6fd3cfa68b4f1a0cc84e",
+  "context_hash": "fd043c70c0171d593d6b61d4689fb4f9b71d4c364ea15f76908e8fceaca7fbd9",
+  "passed": true,
+  "issues": [],
+  "copy_review": {
+    "passed": true,
+    "issues": []
+  }
+}

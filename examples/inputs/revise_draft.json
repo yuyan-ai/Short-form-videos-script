@@ -1,0 +1,35 @@
+{
+  "title": "给创作加上字幕",
+  "scenes": [
+    {
+      "scene_id": "S01",
+      "visual": "创作者工作画面",
+      "voiceover": "准备好这次的创作内容。",
+      "subtitle": "准备好这次的创作内容。",
+      "min_visual_seconds": 8,
+      "claims": []
+    },
+    {
+      "scene_id": "S02",
+      "visual": "产品演示画面",
+      "voiceover": "支持字幕",
+      "subtitle": "支持字幕",
+      "min_visual_seconds": 22,
+      "claims": [
+        {
+          "text": "支持字幕",
+          "material_id": "P01",
+          "fact_id": "P01-F01"
+        }
+      ]
+    },
+    {
+      "scene_id": "S03",
+      "visual": "创作者工作画面",
+      "voiceover": "检查文字，再发布你的作品。",
+      "subtitle": "检查文字，再发布你的作品。",
+      "min_visual_seconds": 8,
+      "claims": []
+    }
+  ]
+}

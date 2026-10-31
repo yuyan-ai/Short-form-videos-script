@@ -1,0 +1,79 @@
+{
+  "mode": "live",
+  "status": "failed",
+  "reason": "模型连接失败或超时，请检查网络与地址",
+  "script": {
+    "title": "给创作加上字幕",
+    "scenes": [
+      {
+        "scene_id": "S01",
+        "visual": "创作者工作画面",
+        "voiceover": "准备好这次的创作内容。",
+        "subtitle": "准备好这次的创作内容。",
+        "min_visual_seconds": 8.0,
+        "claims": []
+      },
+      {
+        "scene_id": "S02",
+        "visual": "产品演示画面",
+        "voiceover": "支持字幕",
+        "subtitle": "支持字幕",
+        "min_visual_seconds": 22.0,
+        "claims": [
+          {
+            "text": "支持字幕",
+            "material_id": "P01",
+            "fact_id": "P01-F01"
+          }
+        ]
+      },
+      {
+        "scene_id": "S03",
+        "visual": "创作者工作画面",
+        "voiceover": "检查文字，再发布你的作品。",
+        "subtitle": "检查文字，再发布你的作品。",
+        "min_visual_seconds": 8.0,
+        "claims": []
+      }
+    ],
+    "revision": 1
+  },
+  "duration": {
+    "draft_hash": "363ebe6f2e553f0632fb4e1b67f7270d5dc0d44857c6c9a464c004daa851440a",
+    "scenes": [
+      {
+        "scene_id": "S01",
+        "seconds": 8.5,
+        "voice_seconds": 2.5,
+        "subtitle_seconds": 2.5,
+        "padding_seconds": 5.5
+      },
+      {
+        "scene_id": "S02",
+        "seconds": 22.5,
+        "voice_seconds": 1.0,
+        "subtitle_seconds": 1.0,
+        "padding_seconds": 21.0
+      },
+      {
+        "scene_id": "S03",
+        "seconds": 8.5,
+        "voice_seconds": 2.75,
+        "subtitle_seconds": 2.75,
+        "padding_seconds": 5.25
+      }
+    ],
+    "total_seconds": 39.5,
+    "voice_seconds": 6.25,
+    "padding_seconds": 31.75,
+    "method": "每秒4个字/字符，逐镜取最低画面时长与朗读时长较大值，加0.5秒停顿；仅为估算"
+  },
+  "sources": [
+    "P01"
+  ],
+  "checks": {},
+  "risks": [
+    "合成素材；时长仅为估算；模型效果须单独评估"
+  ],
+  "steps": 2
+}

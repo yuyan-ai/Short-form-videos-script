@@ -1,0 +1,118 @@
+{
+  "mode": "live",
+  "status": "completed",
+  "reason": "改稿已保存并重新估算为28秒，未超30秒上限；产品事实引用有效，规则检查与文案审核均通过。",
+  "script": {
+    "title": "轻剪字幕功能：给短视频加上字幕",
+    "scenes": [
+      {
+        "scene_id": "S01",
+        "visual": "创作者工作画面",
+        "voiceover": "准备好这次的创作内容。",
+        "subtitle": "准备好这次的创作内容。",
+        "min_visual_seconds": 5.0,
+        "claims": []
+      },
+      {
+        "scene_id": "S02",
+        "visual": "展示竖屏预览画面",
+        "voiceover": "给创作加上字幕。",
+        "subtitle": "给创作加上字幕。",
+        "min_visual_seconds": 4.0,
+        "claims": []
+      },
+      {
+        "scene_id": "S03",
+        "visual": "产品演示画面：轻剪界面展示字幕文字",
+        "voiceover": "轻剪支持字幕。",
+        "subtitle": "支持字幕",
+        "min_visual_seconds": 4.5,
+        "claims": [
+          {
+            "text": "支持字幕",
+            "material_id": "P01",
+            "fact_id": "P01-F01"
+          }
+        ]
+      },
+      {
+        "scene_id": "S04",
+        "visual": "字幕文字特写",
+        "voiceover": "逐句检查字幕，确认文字与画面对应。",
+        "subtitle": "逐句检查字幕，确认文字与画面对应。",
+        "min_visual_seconds": 6.5,
+        "claims": []
+      },
+      {
+        "scene_id": "S05",
+        "visual": "展示竖屏预览画面",
+        "voiceover": "检查文字，再发布你的作品。",
+        "subtitle": "检查文字，再发布你的作品。",
+        "min_visual_seconds": 5.5,
+        "claims": []
+      }
+    ],
+    "revision": 2
+  },
+  "duration": {
+    "draft_hash": "9417ce7b56ed9f87a5255513a84fc911a85c65f22f8d6fd3cfa68b4f1a0cc84e",
+    "scenes": [
+      {
+        "scene_id": "S01",
+        "seconds": 5.5,
+        "voice_seconds": 2.5,
+        "subtitle_seconds": 2.5,
+        "padding_seconds": 2.5
+      },
+      {
+        "scene_id": "S02",
+        "seconds": 4.5,
+        "voice_seconds": 1.75,
+        "subtitle_seconds": 1.75,
+        "padding_seconds": 2.25
+      },
+      {
+        "scene_id": "S03",
+        "seconds": 5.0,
+        "voice_seconds": 1.5,
+        "subtitle_seconds": 1.0,
+        "padding_seconds": 3.0
+      },
+      {
+        "scene_id": "S04",
+        "seconds": 7.0,
+        "voice_seconds": 3.75,
+        "subtitle_seconds": 3.75,
+        "padding_seconds": 2.75
+      },
+      {
+        "scene_id": "S05",
+        "seconds": 6.0,
+        "voice_seconds": 2.75,
+        "subtitle_seconds": 2.75,
+        "padding_seconds": 2.75
+      }
+    ],
+    "total_seconds": 28.0,
+    "voice_seconds": 12.25,
+    "padding_seconds": 13.25,
+    "method": "每秒4个字/字符，逐镜取最低画面时长与朗读时长较大值，加0.5秒停顿；仅为估算"
+  },
+  "sources": [
+    "P01"
+  ],
+  "checks": {
+    "draft_hash": "9417ce7b56ed9f87a5255513a84fc911a85c65f22f8d6fd3cfa68b4f1a0cc84e",
+    "context_hash": "fd043c70c0171d593d6b61d4689fb4f9b71d4c364ea15f76908e8fceaca7fbd9",
+    "passed": true,
+    "issues": [],
+    "copy_review": {
+      "passed": true,
+      "issues": []
+    }
+  },
+  "risks": [
+    "合成素材；时长仅为估算；模型效果须单独评估"
+  ],
+  "steps": 6
+}
