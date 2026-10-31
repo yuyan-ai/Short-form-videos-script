@@ -45,4 +45,4 @@
 - 题号：4。
 - GitHub：[yuyan-ai/Short-form-videos-script](https://github.com/yuyan-ai/Short-form-videos-script)。
 - 最终commit SHA：7942b0a67053f81e72636a3f51f4ede116ba6597。
-- 实际投入时间：3小时（作者自述）。
+- 实际投入时间：3小时。
