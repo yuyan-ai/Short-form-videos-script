@@ -83,3 +83,7 @@ pytest：30 passed。新增回归覆盖无关引用、时长上限内的无效�
 记录：`examples/runs/20261031-153621-1799c0bf`。初始import_draft观察包含工具计算的39.5秒报告；模型检索后改稿v2，重新估时20.5秒。确定性规则发现IRRELEVANT_CITATION，即便模型文案审核通过也未放行。模型据此改稿v3，再估时18.5秒。第二次文案审核失败，最终总时间预算耗尽，状态budget_exceeded，未宣称完成。
 
 该记录提供模型观察超时和规则结果后实际修正的证据，并验证模型审核不能绕过确定性引用门禁。它不是完整成功交付记录；此前28秒completed记录仍单独保留。导入首稿来自用户，两个记录均不能冒充模型自主生成超时首稿。
+
+## 当前验收入口
+
+完整场景与运行记录见 [验收索引](06-acceptance.md)。本次实际自动化测试结果为40 passed，原始 [文本报告](../examples/test-results/pytest.txt) 和 [JUnit报告](../examples/test-results/pytest.xml) 已归档至examples/。测试预期由tests/中的断言定义，JUnit报告记录逐项实际结果。

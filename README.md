@@ -141,3 +141,7 @@ docs/                   # 需求、设计和评估文档
 - [测试结果与真实运行记录](docs/03-evaluation.md)
 - [AI 辅助记录](docs/04-ai-usage.md)
 - [项目复盘](docs/05-retrospective.md)
+
+## 考核材料
+
+实际投入时间：3小时。个人负责框架设计、整体思路和使用验证；AI辅助范围见 [贡献记录](docs/04-ai-usage.md)。逐项运行证据、测试报告和待填写的提交信息见 [验收索引](docs/06-acceptance.md)。
